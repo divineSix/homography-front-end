@@ -1,0 +1,234 @@
+<!-- Material UI -->
+<!-- <mat-card>
+  <p mat-card-title>Image Annotator!!</p>
+  <mat-divider></mat-divider>
+
+  <mat-card-content>
+    <br />
+    <mat-form-field style="width: 100%">
+      <button mat-flat-button color="primary" (click)="f_input.click()">
+        Browse
+      </button>
+      <input type="text" readonly matInput [value]="inpFileName" />
+      <input
+        type="file"
+        hidden
+        #f_input
+        (change)="handleFileInput(f_input.files)"
+      />
+    </mat-form-field>
+    <br />
+  </mat-card-content>
+
+  <mat-divider></mat-divider>
+
+  <mat-card-actions align="end">
+    <button mat-stroked-button color="primary" [disabled]="!isFileSelected">
+      Annotate Image
+    </button>
+  </mat-card-actions>
+</mat-card> -->
+
+<!-- Bootstrap UI -->
+<!-- <div class="mb-3">
+  <label for="formFile" class="form-label">Select Image!</label>
+  <input class="form-control" type="file" id="formFile" text="Browse" />
+</div> -->
+
+<!-- <div class="container"> -->
+<div class="card border-0">
+  <div class="card-body">
+    <h5 class="card-title font-weight-bold" align="center">Annotate Image</h5>
+    <!-- <hr /> -->
+
+    <div class="mb-3" align="center">
+      <input
+        style="width: 400px;"
+        class="form-control"
+        title="Select an image to annotate!"
+        type="file"
+        text="Browse"
+        #f_input
+        (change)="handleFileInput($event)"
+      />
+    </div>
+
+    <!-- <div *ngIf="isFileSelected" style="overflow: scroll;" align="center">
+        <img
+          class="card-img-center"
+          src="{{ imgURL }}"
+          width="1000"
+          height="1000"
+        />
+      </div> -->
+
+    <!-- ERROR -->
+    <!-- Visualization breaks when the image-zoom component is embedded inside a div. This is because the dots are on the page, and if the image is rendered within a div, the points marked will look like they are moving with the image. This is because the page co-ordinates themselves don't change, only the div image co-ordinates are changing.  -->
+    <!-- Relative positioning is not helping us.  -->
+
+    <!-- <div
+      *ngIf="isFileSelected"
+      style="overflow: scroll;"
+      id="imageDiv"
+      align="center"
+    >
+      <lib-ngx-image-zoom
+        #myImg
+        [thumbImage]="imgURL"
+        [fullImage]="imgURL"
+        [enableScrollZoom]="true"
+        [enableLens]="true"
+        (zoomPosition)="trackCurrentPos($event)"
+        (click)="imageClickEvent($event)"
+      >
+      </lib-ngx-image-zoom>
+    </div> -->
+
+    <!-- BUG -->
+    <!-- Description: The visualization points break down when we encapsulate the image zoom component within a div with overflow scrolling. This is because scrolling changes the image component within the div, where as the visualization co-ordinates are based on page co-ordinates, which don't change when scrolling. This creates an effect where it looks like the selected points move along as we scroll.  -->
+    <!-- Note 1: Attempting to create points with relative positioning instead of absolute positions will not help us, as the co-ordinate points of the click position are unknown.  -->
+    <lib-ngx-image-zoom
+      *ngIf="isFileSelected"
+      #myImg
+      [thumbImage]="imgURL"
+      [fullImage]="imgURL"
+      [enableScrollZoom]="true"
+      [enableLens]="true"
+      [maxZoomRatio]="30"
+      [lensWidth]="120"
+      [lensHeight]="120"
+      (zoomPosition)="trackCurrentPos($event)"
+      (click)="imageClickEvent($event)"
+      style="cursor: crosshair !important;"
+    >
+    </lib-ngx-image-zoom>
+
+    <!-- <hr /> -->
+
+    <!-- <p class="card-text">{{ JSON.stringify(currentPos) }}</p>
+    <p class="card-text">{{ JSON.stringify(clickPos) }}</p>
+    <p *ngFor="let pos of selectedPoints; let i = index">
+      {{ i }}: {{ JSON.stringify(pos) }}
+    </p> -->
+
+    <hr />
+
+    <!-- TODO: Create a separate div for export and a separate div for clear buttons -->
+    <div class="d-flex row" *ngIf="isFileSelected">
+      <div class="col-3"></div>
+      <div class="col-3">
+        <div class="row p-2">
+          <div class="col-2"></div>
+          <div
+            class="btn-group col-8"
+            role="group"
+            aria-label="Basic radio toggle button group"
+          >
+            <input
+              type="radio"
+              class="btn-check"
+              name="clear-points-{{ instance_id.toString() }}"
+              id="radiobtn1-{{ instance_id.toString() }}"
+              autocomplete="off"
+              (change)="
+                clearPointsSelectionChangeEvent(
+                  $event,
+                  ClearPointsSelectionType.ALL
+                )
+              "
+            />
+            <label
+              class="btn btn-outline-primary"
+              for="radiobtn1-{{ instance_id.toString() }}"
+              >Clear All</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="clear-points-{{ instance_id.toString() }}"
+              id="radiobtn2-{{ instance_id.toString() }}"
+              autocomplete="off"
+              (change)="
+                clearPointsSelectionChangeEvent(
+                  $event,
+                  ClearPointsSelectionType.SPECIFIC
+                )
+              "
+            />
+            <label
+              class="btn btn-outline-primary"
+              for="radiobtn2-{{ instance_id.toString() }}"
+              >Clear Specific Points</label
+            >
+          </div>
+          <div class="col-2"></div>
+        </div>
+        <div class="row p-2">
+          <div class="col-2"></div>
+          <div
+            *ngIf="clearPointsSelection == ClearPointsSelectionType.SPECIFIC"
+            class="col-8"
+            style="font-size: small"
+          >
+            <input
+              type="text"
+              style="width: 100%;"
+              id="txtClearIndices-{{ instance_id.toString() }}"
+              class="form-control"
+              placeholder="Point Indices [CSV]"
+              #txtPointIndices
+            />
+          </div>
+          <div class="col-2"></div>
+        </div>
+        <div class="row p-2">
+          <div class="col-2"></div>
+          <div class="col-8" align="center">
+            <button
+              *ngIf="clearPointsSelection != ClearPointsSelectionType.NONE"
+              type="button"
+              class="btn btn-primary"
+              [disabled]="
+                !isFileSelected && selectedPoints && selectedPoints.length > 0
+              "
+              (click)="clearPointsHelper()"
+            >
+              Clear Points
+            </button>
+          </div>
+          <div class="col-2"></div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="row p-2">
+          <div class="col-3"></div>
+          <div class="col-6">
+            <input
+              type="text"
+              style="width: 100%;"
+              id="txtExportFile-{{ instance_id.toString() }}"
+              class="form-control"
+              placeholder="JSON Filename"
+              #txtExportFile
+            />
+          </div>
+        </div>
+        <div class="row p-2">
+          <div class="col-3"></div>
+          <div class="col-6" align="center">
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!isFileSelected"
+              (click)="exportToJSON(txtExportFile.value)"
+            >
+              Export as JSON
+            </button>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
+  </div>
+</div>
