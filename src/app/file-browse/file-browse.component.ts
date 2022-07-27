@@ -3,6 +3,8 @@ import {
   ElementRef,
   Inject,
   Input,
+  Output, 
+  EventEmitter,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -10,7 +12,6 @@ import { FormControl, Validators } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
 import { saveAs } from 'file-saver';
 import { findElementsWithAttribute } from '@angular/cdk/schematics/ng-update/html-parsing/elements';
-// import { FileUploadService } from './file-upload.service';
 
 enum ClearPointsSelection {
   NONE,
@@ -29,7 +30,8 @@ export class FileBrowseComponent implements OnInit {
     this.JSON = JSON;
   }
 
-  @Input() instance_id: number;
+  // recheck from number to string. 
+  @Input() instance_id: string;
   @ViewChild('myImg', { static: false }) myImg: ElementRef;
   @ViewChild('txtPointIndices', { static: false }) txtPointIndices: ElementRef;
 
@@ -51,6 +53,7 @@ export class FileBrowseComponent implements OnInit {
   // Actual Data!
   // Contains imgPoint & pagePoint co-ordinates
   selectedPoints: any[];
+  @Output() exportPointsEvent = new EventEmitter<string>();
 
   // Global Javascript Utilities
   JSON: any;
@@ -140,17 +143,17 @@ export class FileBrowseComponent implements OnInit {
     }
   }
 
-  // TODO: Remove all absolute points from the visualization screen
+  // Remove all absolute points from the visualization screen
   clearVisualizationPoints() {
     const elements = this.document.getElementsByClassName(
-      'dot-div' + ' ' + 'instance-' + this.instance_id.toString()
+      'dot-div' + ' ' + 'instance-' + this.instance_id
     );
     for (let element of Array.from(elements)) {
       element.remove();
     }
   }
 
-  // TODO: Refill all visualization points if any of them have been cleared.
+  // Refill all visualization points if any of them have been cleared.
   refillVisualizationPoints() {
     this.selectedPoints.forEach((element, index) => {
       this.drawPoint(element['pagePoint'], 3, index.toString());
@@ -167,7 +170,7 @@ export class FileBrowseComponent implements OnInit {
     // console.log(this.clickPos);
     // console.log(event);
 
-    // TODO: Push ClickPositions into an array
+    // Push ClickPositions into an array
     if (!this.selectedPoints) this.selectedPoints = [];
     this.selectedPoints.push({ imgPoint: this.clickPos, pagePoint: absPoint });
     var elmntIndex = this.selectedPoints?.length - 1;
@@ -195,7 +198,7 @@ export class FileBrowseComponent implements OnInit {
     this.myImg.nativeElement.focus();
   }
 
-  // TODO: Export Click Positions into a JSON file
+  // Export Click Positions into a JSON file
   exportToJSON(text: string = 'export') {
     var regex = /^[\w\-. ]+$/;
     if (!regex.test(text)) {
@@ -212,9 +215,8 @@ export class FileBrowseComponent implements OnInit {
       return elmnt['imgPoint'];
     });
     var obj = { points: pointsArray };
+    this.exportPointsEvent.emit(JSON.stringify({ points: pointsArray, id: this.instance_id}));
     var blob = new Blob([JSON.stringify(obj)], { type: 'application/json' });
     saveAs(blob, text + '.json');
   }
-
-  // TODO: Clear Annotations.
 }

@@ -1,44 +1,7 @@
-<!-- Material UI -->
-<!-- <mat-card>
-  <p mat-card-title>Image Annotator!!</p>
-  <mat-divider></mat-divider>
-
-  <mat-card-content>
-    <br />
-    <mat-form-field style="width: 100%">
-      <button mat-flat-button color="primary" (click)="f_input.click()">
-        Browse
-      </button>
-      <input type="text" readonly matInput [value]="inpFileName" />
-      <input
-        type="file"
-        hidden
-        #f_input
-        (change)="handleFileInput(f_input.files)"
-      />
-    </mat-form-field>
-    <br />
-  </mat-card-content>
-
-  <mat-divider></mat-divider>
-
-  <mat-card-actions align="end">
-    <button mat-stroked-button color="primary" [disabled]="!isFileSelected">
-      Annotate Image
-    </button>
-  </mat-card-actions>
-</mat-card> -->
-
-<!-- Bootstrap UI -->
-<!-- <div class="mb-3">
-  <label for="formFile" class="form-label">Select Image!</label>
-  <input class="form-control" type="file" id="formFile" text="Browse" />
-</div> -->
-
 <!-- <div class="container"> -->
 <div class="card border-0">
   <div class="card-body">
-    <h5 class="card-title font-weight-bold" align="center">Annotate Image</h5>
+    <h5 class="card-title font-weight-bold" align="center">Annotate {{ instance_id == "ground-frame" ? "Ground Frame" : "Ground Map" }}</h5>
     <!-- <hr /> -->
 
     <div class="mb-3" align="center">
@@ -61,10 +24,6 @@
           height="1000"
         />
       </div> -->
-
-    <!-- ERROR -->
-    <!-- Visualization breaks when the image-zoom component is embedded inside a div. This is because the dots are on the page, and if the image is rendered within a div, the points marked will look like they are moving with the image. This is because the page co-ordinates themselves don't change, only the div image co-ordinates are changing.  -->
-    <!-- Relative positioning is not helping us.  -->
 
     <!-- <div
       *ngIf="isFileSelected"
@@ -113,7 +72,6 @@
 
     <hr />
 
-    <!-- TODO: Create a separate div for export and a separate div for clear buttons -->
     <div class="d-flex row" *ngIf="isFileSelected">
       <div class="col-3"></div>
       <div class="col-3">

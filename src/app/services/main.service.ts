@@ -8,7 +8,13 @@ export class MainService {
   base_api_url: string = 'http://localhost:3001/api';
   constructor(private http: HttpClient) {}
 
-  execShellScript() {
-    return this.http.put(this.base_api_url + '/shell/', undefined);
+  execShellScript(data: any) {
+    // console.log(data);
+    var options = {
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }
+    return this.http.post(this.base_api_url + "/shell", JSON.stringify(data), options);
   }
 }
