@@ -32,6 +32,7 @@ export class FileBrowseComponent implements OnInit {
 
   // recheck from number to string. 
   @Input() instance_id: string;
+  @Input() title: string;
   @ViewChild('myImg', { static: false }) myImg: ElementRef;
   @ViewChild('txtPointIndices', { static: false }) txtPointIndices: ElementRef;
 
@@ -42,6 +43,7 @@ export class FileBrowseComponent implements OnInit {
   inpFileName: string = '';
   imgURL: any = '#';
   isFileSelected: boolean = false;
+  @Output() exportImageFileEvent = new EventEmitter<File>();
 
   // Temporary Data!!
   myThumbnail = 'https://wallpaperaccess.com/full/138728.jpg';
@@ -72,6 +74,7 @@ export class FileBrowseComponent implements OnInit {
       this.inpFile = f;
       this.inpFileName = f.name;
       this.isFileSelected = true;
+      this.exportImageFileEvent.emit(this.inpFile)
 
       const reader = new FileReader();
       reader.readAsDataURL(f);

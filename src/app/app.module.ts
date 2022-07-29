@@ -6,31 +6,19 @@ import { HelloComponent } from './hello.component';
 import { FileBrowseComponent } from './file-browse/file-browse.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MainService } from './services/main.service';
+// import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './routing.module';
 
-// import { MatIconModule } from '@angular/material/icon';
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatToolbarModule } from '@angular/material/toolbar';
-// import { MatCardModule } from '@angular/material/card';
-// import { MatDividerModule } from '@angular/material/divider';
-// import { MatListModule } from '@angular/material/list';
+
 import { NgxImageZoomModule } from 'ngx-image-zoom';
-
-// const materialModules = [
-//   MatIconModule,
-//   MatButtonModule,
-//   MatInputModule,
-//   MatFormFieldModule,
-//   MatToolbarModule,
-//   MatCardModule,
-//   MatDividerModule,
-//   MatListModule,
-// ];
+import { VisualizeHomographyComponent } from './visualize-homography/visualize-homography.component';
+import { ComputeHomographyComponent } from './compute-homography/compute-homography.component';
 
 @NgModule({
-  imports: [BrowserModule, FormsModule, NgxImageZoomModule, HttpClientModule],
-  declarations: [AppComponent, HelloComponent, FileBrowseComponent],
+  imports: [
+    BrowserModule, FormsModule, NgxImageZoomModule, HttpClientModule, AppRoutingModule
+  ],
+  declarations: [AppComponent, HelloComponent, FileBrowseComponent, VisualizeHomographyComponent, ComputeHomographyComponent],
   bootstrap: [AppComponent],
   providers: [MainService],
 })

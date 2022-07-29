@@ -8,13 +8,24 @@ export class MainService {
   base_api_url: string = 'http://localhost:3001/api';
   constructor(private http: HttpClient) {}
 
-  execShellScript(data: any) {
+  execComputeHomography(data: any) {
     // console.log(data);
     var options = {
       headers:{
         'Content-Type': 'application/json'
       }
     }
-    return this.http.post(this.base_api_url + "/shell", JSON.stringify(data), options);
+    return this.http.post(this.base_api_url + "/compute_homography", JSON.stringify(data), options);
+  }
+
+  // execVisualizeHomography(data: any)
+  execVisualizeHomography(formData: FormData) {
+    // var options = {
+    //   headers:{
+    //     'Content-Type': 'application/json'
+    //   }
+    // }
+    console.log(formData);
+    return this.http.post(this.base_api_url + "/visualize_homography", formData);
   }
 }

@@ -1,7 +1,28 @@
-<app-file-browse [instance_id]="'ground-frame'" (exportPointsEvent)="readChildJSON($event)"></app-file-browse>
-<app-file-browse [instance_id]="'cricket-map'" (exportPointsEvent)="readChildJSON($event)"></app-file-browse>
+<!-- <app-file-browse [instance_id]="'ground-frame'" [title]="'Annotate Ground Frame'" (exportPointsEvent)="readChildJSON($event)"></app-file-browse>
+<app-file-browse [instance_id]="'cricket-map'" [title]="'Annotate Ground Map'" (exportPointsEvent)="readChildJSON($event)"></app-file-browse>
 <div class="p-4" align="center">
   <button (click)="triggerShellScript()" class="btn btn-default btn-primary">
     Execute Shell Script!!
   </button>
-</div>
+</div> -->
+
+<h1>Angular App</h1>
+<!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->
+<nav class="p-4 border" align="center">
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/compute" routerLinkActive="disabled active" (click)="clearAllHTMLPoints()">
+        Compute Homography
+      </a>
+    </li>
+    <li>
+      <!-- <a routerLink="/visualize" routerLinkActive="active" (click)="clearAllHTMLPoints()" ariaCurrentWhenActive="page"> -->
+      <a class="nav-link" routerLink="/visualize" routerLinkActive="disabled active" (click)="clearAllHTMLPoints()">
+        Visualize Homography
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- The routed views render in the <router-outlet>-->
+<router-outlet></router-outlet>

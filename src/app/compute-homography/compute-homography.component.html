@@ -1,0 +1,7 @@
+<app-file-browse [instance_id]="'ground-frame'" [title]="'Annotate Ground Frame'" (exportPointsEvent)="readChildJSON($event)"></app-file-browse>
+<app-file-browse [instance_id]="'cricket-map'" [title]="'Annotate Ground Map'" (exportPointsEvent)="readChildJSON($event)"></app-file-browse>
+<div class="p-4" align="center">
+  <button (click)="triggerComputeScript()" class="btn btn-default btn-primary">
+    Execute Shell Script!!
+  </button>
+</div>

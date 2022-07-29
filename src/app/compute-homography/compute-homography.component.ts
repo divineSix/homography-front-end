@@ -1,20 +1,22 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, VERSION } from '@angular/core';
-import { MainService } from './services/main.service';
+import { Component, OnInit } from '@angular/core';
+import { MainService } from '../services/main.service';
 
 @Component({
-  selector: 'my-app',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'app-compute-homography',
+  templateUrl: './compute-homography.component.html',
+  styleUrls: ['./compute-homography.component.css']
 })
-export class AppComponent {
-  name = 'Angular ' + VERSION.major;
+
+export class ComputeHomographyComponent implements OnInit {
 
   // JSON points:
   groundFramePoints: any;
   cricketMapPoints: any;
 
-  constructor(private mainService: MainService, @Inject(DOCUMENT) private document: Document) {}
+  constructor(private mainService: MainService) { }
+
+  ngOnInit(): void {
+  }
 
   validateJSON() {
     if (!this.groundFramePoints || this.groundFramePoints.length === 0) {
@@ -31,8 +33,8 @@ export class AppComponent {
     }
     return true;
   }
-  
-  triggerShellScript() {
+
+  triggerComputeScript() {
     if (this.validateJSON()) {
       var output_string: string = '';
       var isError: boolean = false;
@@ -61,10 +63,4 @@ export class AppComponent {
     }
   }
 
-  clearAllHTMLPoints() {
-    const elements = this.document.getElementsByClassName('dot-div');
-    for (let element of Array.from(elements)) {
-      element.remove();
-    }
-  }
 }
