@@ -4,7 +4,7 @@
 
 <div class="p-4" align="center" *ngIf="isVisualizationComplete">
     <figure>
-        <img class="image" src="{{visualizationImageUrl}}" />
+        <img class="image" [src]="visualizationImageUrl" />
         <figcaption>Annotated Homography Map</figcaption>
     </figure>
 

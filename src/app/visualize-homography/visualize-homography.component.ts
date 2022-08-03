@@ -30,6 +30,7 @@ export class VisualizeHomographyComponent implements OnInit {
 
   triggerVisualizationScript() {
     if (this.validatePointsArray()) {
+      this.isVisualizationComplete = false;
       var output_string: string = '';
       var isError: boolean = false;
       let params: any = {
@@ -42,7 +43,8 @@ export class VisualizeHomographyComponent implements OnInit {
       this.mainService.execVisualizeHomography(formData).subscribe({
         next: (data: any) => {
           if(data["resources"] && data["resources"]["stitched_image_url"]) {
-            this.visualizationImageUrl = this.baseServerUrl + data["resources"]["stitched_image_url"];
+            // Stitched Image URL does not change, only the actual image changes at the server. Adding a timestamp component to simply force the client-side to reload the URL to get the updated image. 
+            this.visualizationImageUrl = this.baseServerUrl + data["resources"]["stitched_image_url"] + "?" + (new Date()).getTime();
             this.isVisualizationComplete = true;
           }
         },
