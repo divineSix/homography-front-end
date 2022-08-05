@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MainService } from '../services/main.service';
 
 @Component({
@@ -14,6 +14,9 @@ export class VisualizeHomographyComponent implements OnInit {
   isVisualizationComplete: boolean = false;
   visualizationImageUrl: string = "#";
   baseServerUrl: string = "http://localhost:3001";
+  isBoundaryPoints: boolean = false;
+
+  @ViewChild('selBoundary') selBoundary: ElementRef;
 
   constructor(private mainService: MainService) { }
 
@@ -29,12 +32,18 @@ export class VisualizeHomographyComponent implements OnInit {
   }
 
   triggerVisualizationScript() {
+    if ((!this.selBoundary.nativeElement.value) || (this.selBoundary.nativeElement.value === "-1")) {
+      alert("Please select the points type!");
+      return false;
+    }
+
     if (this.validatePointsArray()) {
       this.isVisualizationComplete = false;
       var output_string: string = '';
       var isError: boolean = false;
       let params: any = {
-        "image-points": this.pointsArray
+        "image-points": this.pointsArray,
+        "is-boundary": (this.selBoundary.nativeElement.value === "1") ? true : false
       }
       var formData: FormData = new FormData();
       formData.append("data", JSON.stringify(params));
@@ -64,5 +73,12 @@ export class VisualizeHomographyComponent implements OnInit {
   readChildJSON(event: any) {
     var data = JSON.parse(event);
     this.pointsArray = data.points;
+  }
+
+  boundaryDropdownChange(value: any) {
+    if(value === "1")
+      this.isBoundaryPoints = true;
+    else
+      this.isBoundaryPoints = false;
   }
 }
