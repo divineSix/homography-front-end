@@ -53,6 +53,7 @@ export class ComputeHomographyComponent implements OnInit {
     }
   }
 
+  // Information from Child Component
   readChildJSON(event: string) {
     var data = JSON.parse(event);
     if(data.id == "cricket-map") {

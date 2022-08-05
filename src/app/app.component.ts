@@ -61,6 +61,10 @@ export class AppComponent {
     }
   }
 
+  /**
+   * @deprecated after moving to canvas-based image visualization. HTML points not used anymore. 
+   * May be required if using the old file-browse component. Look into it's code for more details on the below function's use. 
+   */
   clearAllHTMLPoints() {
     const elements = this.document.getElementsByClassName('dot-div');
     for (let element of Array.from(elements)) {

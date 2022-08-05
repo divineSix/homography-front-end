@@ -24,6 +24,9 @@ enum ClearPointsSelection {
   templateUrl: './file-browse.component.html',
   styleUrls: ['./file-browse.component.css'],
 })
+/**
+ * @deprecated component. Use the file-annotate component instead.
+ */
 export class FileBrowseComponent implements OnInit {
   constructor(@Inject(DOCUMENT) private document: Document) {
     // Javascript as Component Properties
@@ -80,8 +83,8 @@ export class FileBrowseComponent implements OnInit {
       reader.readAsDataURL(f);
       reader.onload = (_event) => {
         this.imgURL = reader.result;
+        console.log(this.imgURL);
       };
-      // console.log(this.imgURL);
 
       this.selectedPoints = [];
       this.clearVisualizationPoints();

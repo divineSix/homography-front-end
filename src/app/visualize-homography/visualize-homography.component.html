@@ -1,6 +1,6 @@
-<app-file-browse [instance_id]="'visualize-homography'" [title]="'Visualize Homography'"
+<app-file-annotate [instance_id]="'visualize-homography'" [title]="'Visualize Homography'"
     (exportPointsEvent)="readChildJSON($event)" (exportImageFileEvent)="readChildImageFile($event)">
-</app-file-browse>
+</app-file-annotate>
 
 <div class="p-4" align="center" *ngIf="isVisualizationComplete">
     <figure>
