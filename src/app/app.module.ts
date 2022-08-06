@@ -14,12 +14,13 @@ import { FileBrowseComponent } from './file-browse/file-browse.component';
 import { VisualizeHomographyComponent } from './visualize-homography/visualize-homography.component';
 import { ComputeHomographyComponent } from './compute-homography/compute-homography.component';
 import { FileAnnotateComponent } from './file-annotate/file-annotate.component';
+import { ConfigSelectorComponent } from './config-selector/config-selector.component';
 
 @NgModule({
   imports: [
     BrowserModule, FormsModule, NgxImageZoomModule, HttpClientModule, AppRoutingModule
   ],
-  declarations: [AppComponent, HelloComponent, FileBrowseComponent, VisualizeHomographyComponent, ComputeHomographyComponent, FileAnnotateComponent],
+  declarations: [AppComponent, HelloComponent, FileBrowseComponent, VisualizeHomographyComponent, ComputeHomographyComponent, FileAnnotateComponent, ConfigSelectorComponent],
   bootstrap: [AppComponent],
   providers: [MainService],
 })

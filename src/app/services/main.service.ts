@@ -28,4 +28,12 @@ export class MainService {
     console.log(formData);
     return this.http.post(this.base_api_url + "/visualize_homography", formData);
   }
+
+  execStartScript () {
+    return this.http.post(this.base_api_url + "/start_process", undefined);
+  }
+
+  execStopScript () {
+    return this.http.post(this.base_api_url + "/stop_process", undefined);
+  }
 }
