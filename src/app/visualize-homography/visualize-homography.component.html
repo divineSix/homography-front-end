@@ -21,8 +21,8 @@
 </div> -->
 
 <div class="p-4 d-flex" align="center">
-    <div class="col-5"></div>
-    <div class="col-1">
+    <div class="col-4"></div>
+    <div class="p-2 col-2">
         <select #selBoundary (change)="boundaryDropdownChange(selBoundary.value)" class="btn btn-secondary"
             name="boundary-dropdown" id="selBoundary">
             <option value="-1">Select points type</option>
@@ -30,10 +30,10 @@
             <option value="2">Standard Points</option>
         </select>
     </div>
-    <div class="col-1">
+    <div class="p-2 col-2">
         <button (click)="triggerVisualizationScript()" class="btn btn-default btn-primary">
             Execute Shell Script!!
         </button>
     </div>
-    <div class="col-5"></div>
+    <div class="col-4"></div>
 </div>
