@@ -61,6 +61,9 @@ export class VisualizeHomographyComponent implements OnInit {
           // console.log(err);
           isError = true;
           this.isVisualizationComplete = false;
+          if(err.error && err.error.message) {
+            alert(err.error.message);
+          }
         },
       });
     }

@@ -44,10 +44,16 @@ export class ComputeHomographyComponent implements OnInit {
       }
       
       this.mainService.execComputeHomography(params).subscribe({
-        next: (data: any) => (output_string = data.msg),
+        next: (data: any) => { 
+          if(data.message)
+            alert(data.message);
+        },
         error: (err: any) => {
-          console.log(err);
+          // console.log(err);
           isError = true;
+          if(err.error && err.error.message) {
+            alert(err.error.message);
+          }
         },
       });
     }

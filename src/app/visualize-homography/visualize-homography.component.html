@@ -4,8 +4,10 @@
 
 <div class="p-4" align="center" *ngIf="isVisualizationComplete">
     <figure>
-        <img class="image" [src]="visualizationImageUrl" />
-        <figcaption>Annotated Homography Map</figcaption>
+        <div class="figure-wrapper">
+            <img class="image" [src]="visualizationImageUrl" />
+        </div>
+        <figcaption>Annotated Visualization</figcaption>
     </figure>
 
     <hr />

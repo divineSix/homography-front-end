@@ -20,13 +20,19 @@ export class MainService {
 
   // execVisualizeHomography(data: any)
   execVisualizeHomography(formData: FormData) {
-    // var options = {
-    //   headers:{
-    //     'Content-Type': 'application/json'
-    //   }
-    // }
-    console.log(formData);
     return this.http.post(this.base_api_url + "/visualize_homography", formData);
+  }
+
+  performBackupAndClear(foldername: any) {
+    var options = {
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    };
+    var params = {
+      "backup_folder": foldername
+    }
+    return this.http.post(this.base_api_url + "/backups", JSON.stringify(params), options);
   }
 
   execStartScript () {
