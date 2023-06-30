@@ -15,6 +15,7 @@ import { VisualizeHomographyComponent } from './visualize-homography/visualize-h
 import { ComputeHomographyComponent } from './compute-homography/compute-homography.component';
 import { FileAnnotateComponent } from './file-annotate/file-annotate.component';
 import { ConfigSelectorComponent } from './config-selector/config-selector.component';
+// import { ExperimentComponent } from './experiment/experiment.component';
 
 @NgModule({
   imports: [

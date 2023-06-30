@@ -1,5 +1,5 @@
-<div class="card border-0">
-    <div class="card-body">
+<div class="card">
+    <div class="card-body border">
         <h5 class="card-title font-weight-bold" align="center">
             {{ title }}
         </h5>
@@ -10,14 +10,96 @@
         </div>
 
         <div align="center">
+            <div *ngIf="currPoint"> Mouse Over: {{ currPoint.x}}, {{ currPoint.y }} </div>
             <div class="canvas-wrapper" [style.display]="!isFileSelected ? 'none' : 'block'">
-                <canvas #myCanvas (click)="savePointClick($event)"> </canvas>
+                <canvas #myCanvas (mousemove)="mouseCoordinates($event)" (click)="savePointClick($event)"> </canvas>
             </div>
         </div>
-        
-        <hr />
 
-        <div class="d-flex row" *ngIf="isFileSelected">
+        <hr *ngIf="isFileSelected" />
+
+        <div class="d-flex row" *ngIf="isFileSelected">          
+          <div class="col-5"></div>
+          <div class="col-3" align="center">
+            <div class="row p-2" *ngIf="allow_axes">
+              <!-- <div class="col-2"></div> -->
+              <div class="btn-group col-8" role="group" aria-label="Toggle Primary Action">
+                <input type="radio" class="btn-check" name="actions-{{ instance_id.toString() }}" id="action1-{{ instance_id.toString() }}" autocomplete="off"
+                  [checked]="currentActionMode == action_modes.VIS_AXES" (change)="changeActionMode($event, action_modes.VIS_AXES)"/>
+                <label class="btn btn-outline-primary" for="action1-{{ instance_id.toString() }}"> Draw Axes </label>
+                
+                <input type="radio" class="btn-check" name="actions-{{ instance_id.toString() }}" id="action2-{{ instance_id.toString() }}" autocomplete="off"
+                  [checked]="currentActionMode == action_modes.SELECT_POINTS" (change)="changeActionMode($event, action_modes.SELECT_POINTS)"/>
+                <label class="btn btn-outline-primary" for="action2-{{ instance_id.toString() }}"> Select Points </label>
+              </div>
+            </div>
+            <div class="row p-2" *ngIf="(currentActionMode == action_modes.VIS_AXES) && isFileSelected">
+              <div class="col-8">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button type="button" class="btn btn-primary" [disabled]="!((selectedPoints && selectedPoints.length > 0) || (axesPaths && axesPaths.length > 0))" (click)="clearPointsHelper()">
+                      Clear
+                    </button>
+                  </div>
+                  <input type="text" id="txtVisAxes-{{instance_id.toString()}}" class="form-control" placeholder="Point indices [CSV]" #txtVisAxes>
+                  <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" [disabled]="!(selectedPoints && selectedPoints.length > 0)" (click)="triggerVisualization(txtVisAxes.value)">
+                      Visualize Axes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="(currentActionMode == action_modes.SELECT_POINTS && isFileSelected)">
+              <div class="row p-2">
+                <div class="btn-group col-8" role="group">
+                  <input type="radio" class="btn-check" name="clear-points-{{ instance_id.toString() }}" id="clrbtn1-{{instance_id}}" autocomplete="off" (change)="clearPointsSelectionChangeEvent($event,clrTypes.ALL)" [checked]="clearPointsSelection == clrTypes.ALL">
+                  <label for="clrbtn1-{{instance_id}}" class="btn btn-outline-primary"> Clear All</label>
+                  <input type="radio" class="btn-check" name="clear-points-{{ instance_id.toString() }}" id="clrbtn2-{{instance_id}}" autocomplete="off" (change)="clearPointsSelectionChangeEvent($event,clrTypes.SPECIFIC)" [checked]="clearPointsSelection == clrTypes.SPECIFIC">
+                  <label for="clrbtn2-{{instance_id}}" class="btn btn-outline-primary"> Clear Selected</label>
+                </div>
+              </div>
+              <div class="row p-2" *ngIf="clearPointsSelection != clrTypes.NONE">
+                <div class="col-8" align="center">
+                  <div class="input-group" *ngIf="(clearPointsSelection == clrTypes.SPECIFIC)">
+                    <input type="text" id="txtClearIndices-{{ instance_id.toString() }}"class="form-control" placeholder="Point Indices [CSV]" #txtPointIndices>
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" [disabled]="!(selectedPoints && selectedPoints.length > 0)" (click)="clearPointsHelper()">Clear!</button>
+                    </div>
+                  </div>
+                  <div *ngIf="(clearPointsSelection == clrTypes.ALL)">
+                    <button class="btn btn-primary" [disabled]="!(selectedPoints && selectedPoints.length > 0)" (click)="clearPointsHelper()">
+                      Clear!
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="row p-2">
+                <div class="col-8">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <button type="button" class="btn btn-primary" [disabled]="!(isFileSelected && selectedPoints && selectedPoints.length > 0)" (click)="(savePoints())">Save</button>
+                    </div>
+                    <input type="text" id="txtExportFile-{{ instance_id.toString() }}" class="form-control" placeholder="JSON Filename" #txtExportFile>
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-secondary" [disabled]="!(isFileSelected && selectedPoints && selectedPoints.length > 0)" (click)="exportToJSON(txtExportFile.value)">Save & Export</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="row p-2">
+                <div class="col-8">
+                    <button class="btn btn-primary" [disabled]="!(isFileSelected && selectedPoints && selectedPoints.length > 0)" (click)="()">Save Points</button>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- <hr /> -->
+
+        <!-- <div class="d-flex row" *ngIf="isFileSelected">
           <div class="col-3"></div>
           <div class="col-3">
             <div class="row p-2">
@@ -36,7 +118,7 @@
                   (change)="
                     clearPointsSelectionChangeEvent(
                       $event,
-                      ClearPointsSelectionType.ALL
+                      clrTypes.ALL
                     )
                   "
                 />
@@ -55,7 +137,7 @@
                   (change)="
                     clearPointsSelectionChangeEvent(
                       $event,
-                      ClearPointsSelectionType.SPECIFIC
+                      clrTypes.SPECIFIC
                     )
                   "
                 />
@@ -70,7 +152,7 @@
             <div class="row p-2">
               <div class="col-2"></div>
               <div
-                *ngIf="clearPointsSelection == ClearPointsSelectionType.SPECIFIC"
+                *ngIf="clearPointsSelection == clrTypes.SPECIFIC"
                 class="col-8"
                 style="font-size: small"
               >
@@ -89,7 +171,7 @@
               <div class="col-2"></div>
               <div class="col-8" align="center">
                 <button
-                  *ngIf="clearPointsSelection != ClearPointsSelectionType.NONE"
+                  *ngIf="clearPointsSelection != clrTypes.NONE"
                   type="button"
                   class="btn btn-primary"
                   [disabled]="
@@ -131,7 +213,36 @@
               </div>
             </div>
           </div>
+
+          <div class="col-3">
+            <div class="row p-2">
+              <div class="col-3"></div>
+              <div class="col-6">
+                <input
+                  type="text"
+                  style="width: 100%;"
+                  id="txtVisualizeLines-{{ instance_id.toString() }}"
+                  class="form-control"
+                  placeholder="Points"
+                  #txtVisualizeLines
+                />
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class="col-3"></div>
+              <div class="col-6" align="center">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  [disabled]="!isFileSelected"
+                  (click)="visualizeLines(txtVisualizeLines.value)"
+                >
+                  Visualize Perpendiculars
+                </button>
+              </div>
+            </div>
+          </div>
           <hr />
-        </div>
+        </div> -->
     </div>
 </div>
